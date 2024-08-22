@@ -1,0 +1,88 @@
+
+config steps
+------------
+
+1) design and structure the network
+
+2) assign ip addresses to network 
+
+---------------------------------------------------------------------------
+
+R1;
+--
+
+en
+conf t
+hostname R1
+int gig 1/0
+no shutdown
+ip address 192.168.1.254 255.255.255.0
+desc <to sw1>
+
+int gig0/0
+no shutdown
+ip address 192.168.12.1 255.255.255.0
+desc <to R2>
+ex
+
+ip route 192.168.3.0 255.255.255.0 192.168.12.2
+do wr
+do show ip int brief
+do show ip route
+-----------------------------------------------------------------------------
+R2;
+---
+
+en
+conf t
+hostname R2
+int gig 0/0
+no shutdown
+ip address 192.168.12.1 255.255.255.0
+desc <to R2>
+
+int gig1/0
+no shutdown
+ip address 192.168.13.2 255.255.255.0
+desc <to R3>
+ex
+
+ip route 192.168.1.0 255.255.255.0 192.168.12.1
+ip route 192.168.3.0 255.255.255.0 192.168.13.3
+
+do wr
+do show ip int brief
+do show ip route
+
+---------------------------------------------------------------------------
+R3;
+---
+
+en
+conf t
+hostname R3
+int gig 0/0
+no shutdown
+ip address 192.168.13.3 255.255.255.0
+desc <to sw1>
+
+int gig1/0
+no shutdown
+ip address 192.168.3.254 255.255.255.0
+desc <to sw2>
+ex 
+
+ip route 192.168.1.0 255.255.255.0 192.168.13.2
+do wr
+do show ip int brief
+do show ip route
+
+---------------------------------------------------------------------------
+
+test the connections using ping and packets
+
+
+
+
+
+
